@@ -1,9 +1,8 @@
 package network
 
 import (
+	"blockchain/test"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestConnect(t *testing.T) {
@@ -26,9 +25,9 @@ func TestSendMessage(t *testing.T) {
 	trb.Connect(tra)
 
 	msg := []byte("hello world")
-	assert.Nil(t, tra.SendMessage(trb.Addr(), msg))
+	test.AssertNil(t, tra.SendMessage(trb.Addr(), msg))
 
 	rpc := <-trb.Consume()
-	assert.Equal(t, rpc.Payload, msg)
-	assert.Equal(t, rpc.From, tra.Addr())
+	test.AsserEqual(t, rpc.Payload, msg)
+	test.AsserEqual(t, rpc.From, tra.Addr())
 }

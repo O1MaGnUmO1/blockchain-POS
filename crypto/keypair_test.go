@@ -1,9 +1,8 @@
 package crypto
 
 import (
+	"blockchain/test"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestKeypair_Sighn_Verify(t *testing.T) {
@@ -13,15 +12,16 @@ func TestKeypair_Sighn_Verify(t *testing.T) {
 	msg := []byte("Hello world")
 	// normal case
 	sig, err := privateKey.Sign(msg)
-	assert.Nil(t, err)
-	assert.True(t, sig.Verify(publicKey, msg))
+	test.AssertNil(t, err)
+	test.AssertNil(t, err)
+	test.AssertTrue(t, sig.Verify(publicKey, msg))
 	// another private key
 	pk := GeneratePrivateKey()
 	pb := pk.PublicKey()
 
 	anotherMsg := []byte("Goodbye")
 	// verify message of another public key
-	assert.False(t, sig.Verify(pb, msg))
+	test.AssertFalse(t, sig.Verify(pb, msg))
 	// verify wrong message of public key
-	assert.False(t, sig.Verify(publicKey, anotherMsg))
+	test.AssertFalse(t, sig.Verify(publicKey, anotherMsg))
 }
