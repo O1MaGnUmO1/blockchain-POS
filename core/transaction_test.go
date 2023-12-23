@@ -3,6 +3,7 @@ package core
 import (
 	"blockchain/crypto"
 	"blockchain/test"
+	"bytes"
 	"testing"
 )
 
@@ -28,6 +29,17 @@ func TestVerifyTransaction(t *testing.T) {
 	tx.From = otherPrivkey.PublicKey()
 
 	test.AssertNotNil(t, tx.Verify())
+}
+
+func TestTxEncodeDecode(t *testing.T) {
+	tx := randomTxWithSignature(t)
+	buf := &bytes.Buffer{}
+	// gob.Register(elliptic.P256())
+	test.AssertNil(t, tx.Encode(NewGobTxEncoder(buf)))
+
+	txDecoded := new(Transaction)
+	test.AssertNil(t, txDecoded.Decode(NewGobTxDecoder(buf)))
+	test.AsserEqual(t, tx, txDecoded)
 }
 
 func randomTxWithSignature(t *testing.T) *Transaction {
